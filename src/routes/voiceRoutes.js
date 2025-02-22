@@ -1,5 +1,5 @@
 const express = require("express");
-const { triggerVoiceSOS } = require("../controllers/voiceSOSController");
+const { triggerVoiceSOS } = require("../controllers/voiceController.js");
 
 const router = express.Router();
 
