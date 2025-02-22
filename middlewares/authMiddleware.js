@@ -11,7 +11,6 @@ const authMiddleware = async (req, res, next) => {
 
     // Extract token after "Bearer "
     const token = authHeader.split(" ")[1];
-    console.log(token);
     
     if (!token) {
       return res.status(401).json({ message: "Unauthorized: No token provided" });

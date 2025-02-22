@@ -14,23 +14,32 @@ const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN)
 exports.triggerSOS = async (req, res) => {
   try {
     const { location } = req.body;
-    const user = await User.findById(req.user);
+    const user = await User.findById(req.user.id); // Ensure authMiddleware sets req.user.id
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Check for fake reports
-    const isFake = await detectFakeReports(user._id);
-    if (isFake) return res.status(403).json({ message: "Suspicious activity detected, SOS blocked!" });
+    // Extract IP address
+    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    console.log("User IP:", ip);
+
+    // Check for fake reports based on IP
+    const isFake = await detectFakeReports(ip);
 
     // Create SOS record in the database
     const sosAlert = await SOS.create({
-      userId: user._id,
+      IPAddress: ip,
       location,
     });
 
-    const message = `🚨 SOS Alert! ${user.name} needs help at ${location.lat}, ${location.long}. Blood Type: ${user.bloodType}. Medical History: ${user.medicalHistory}`;
+    // Construct SOS alert message
+    const message = `🚨 SOS Alert! ${user.name} needs help at ${location.lat}, ${location.long}. Blood Type: ${user.bloodType}. Medical History: ${user.medicalHistory}. ${isFake ? "(⚠️ BEWARE: THIS IP HAS BEEN FLAGGED FOR SUSPICIOUS ACTIVITY)" : ""}`;
 
-    // Send SMS to emergency contacts
-    for (const contact of user.emergencyContacts) {
+    // Emergency contact list (Add actual contacts from user DB)
+    const emergencyNumbers = user.emergencyContacts || [
+      { phone: "+919166062822" }, // Default emergency contact (for testing)
+    ];
+
+    // Send SMS alert to emergency contacts
+    for (const contact of emergencyNumbers) {
       await client.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER,
