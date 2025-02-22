@@ -9,7 +9,7 @@ class VoiceTrigger extends EventEmitter {
   }
 
   startListening() {
-    console.log("🎙️ Voice detection activated... Say 'Help me' to trigger SOS!");
+    console.log("Voice detection activated... Say 'Help me' to trigger SOS!");
 
     const request = {
       config: {
@@ -17,19 +17,19 @@ class VoiceTrigger extends EventEmitter {
         sampleRateHertz: 16000,
         languageCode: "en-US",
       },
-      interimResults: true, // Get real-time speech results
+      interimResults: true,
     };
 
     const recognizeStream = this.client
       .streamingRecognize(request)
-      .on("error", (err) => console.error("❌ Speech Recognition Error:", err))
+      .on("error", (err) => console.error("Speech Recognition Error:", err))
       .on("data", (data) => {
         const transcript = data.results[0]?.alternatives[0]?.transcript || "";
         console.log("🔊 Detected Speech:", transcript);
 
         if (transcript.toLowerCase().includes("help me")) {
-          console.log("🚨 Emergency SOS Triggered!");
-          this.emit("sos"); // Emit event when "Help me" is detected
+          console.log("Emergency SOS Triggered!");
+          this.emit("sos"); 
         }
       });
 

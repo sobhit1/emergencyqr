@@ -16,10 +16,10 @@ const recognizeSpeech = async (audioPath) => {
 
     const transcript = response.results.map(result => result.alternatives[0].transcript).join("\n");
     
-    console.log("🔊 Recognized Speech:", transcript);
+    console.log("Recognized Speech:", transcript);
     return transcript;
   } catch (err) {
-    console.error("❌ Speech Recognition Error:", err);
+    console.error("Speech Recognition Error:", err);
     throw new Error("Failed to recognize speech");
   }
 };

@@ -13,9 +13,9 @@ const sendSOSAlert = async (phoneNumbers, message) => {
     );
 
     await Promise.all(promises);
-    console.log("✅ SOS Messages Sent Successfully!");
+    console.log("SOS Messages Sent Successfully!");
   } catch (err) {
-    console.error("❌ Twilio Error:", err);
+    console.error("Twilio Error:", err);
     throw new Error("Failed to send SOS alert");
   }
 };

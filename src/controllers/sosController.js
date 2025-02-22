@@ -35,9 +35,9 @@ exports.triggerSOS = async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: "🚀 SOS sent successfully!", sosAlert });
+    res.status(200).json({ message: "SOS sent successfully!", sosAlert });
   } catch (err) {
-    console.error("❌ SOS Trigger Error:", err);
+    console.error("SOS Trigger Error:", err);
     res.status(500).json({ message: "Failed to send SOS alert" });
   }
 };
@@ -50,7 +50,7 @@ exports.getSOSHistory = async (req, res) => {
 
     res.status(200).json(sosHistory);
   } catch (err) {
-    console.error("❌ Error Fetching SOS History:", err);
+    console.error("Error Fetching SOS History:", err);
     res.status(500).json({ message: "Failed to retrieve SOS history" });
   }
 };
@@ -63,9 +63,9 @@ exports.resolveSOS = async (req, res) => {
     sosAlert.resolved = true;
     await sosAlert.save();
 
-    res.status(200).json({ message: "✅ SOS alert marked as resolved", sosAlert });
+    res.status(200).json({ message: "SOS alert marked as resolved", sosAlert });
   } catch (err) {
-    console.error("❌ Error Resolving SOS:", err);
+    console.error("Error Resolving SOS:", err);
     res.status(500).json({ message: "Failed to resolve SOS alert" });
   }
 };

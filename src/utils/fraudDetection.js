@@ -12,7 +12,7 @@ const detectFakeReports = async (ip) => {
     }
     return false;
   } catch (err) {
-    console.error("❌ Error in detectFakeReports:", err);
+    console.error("Error in detectFakeReports:", err);
     return false;
   }
 };

@@ -17,7 +17,7 @@ exports.updateUserProfile = async (req, res) => {
             user: updatedUser,
         });
     } catch (err) {
-        console.error("❌ Profile Update Error:", err);
+        console.error("Profile Update Error:", err);
         res.status(500).json({ message: "Failed to update profile" });
     }
 };
