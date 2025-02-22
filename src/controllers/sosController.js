@@ -24,14 +24,14 @@ exports.triggerSOS = async (req, res) => {
     const message = `🚨 SOS Alert! ${user.name} needs help at ${location.lat}, ${location.long}. Blood Type: ${user.bloodType}. Medical History: ${user.medicalHistory}. ${isFake ? "(⚠️ BEWARE: THIS IP HAS BEEN FLAGGED FOR SUSPICIOUS ACTIVITY)" : ""}`;
 
     const emergencyNumbers = user.emergencyContacts || [
-      { phone: "+919166062822" }, 
+      { phone: "9166062822" }, 
     ];
 
     for (const contact of emergencyNumbers) {
       await client.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER,
-        to: contact.phone,
+        to: `+91${contact.phone}`,
       });
     }
 
