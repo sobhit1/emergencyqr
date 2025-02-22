@@ -5,8 +5,13 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// Configure Multer for handling audio file uploads
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage(); // This doesn't try to write to disk
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Example: limit to 10MB
+  }
+});
 
 /**
  * @desc Process voice input and trigger SOS if "help me" is detected

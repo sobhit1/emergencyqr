@@ -28,10 +28,11 @@ exports.register = async (req, res) => {
       medicalHistory,
     });
 
+    const token = generateToken(user._id);
+    res.setHeader('Authorization', `Bearer ${token}`);
     res.status(201).json({
       message: "User registered successfully",
-      token: generateToken(user._id),
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email }
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
