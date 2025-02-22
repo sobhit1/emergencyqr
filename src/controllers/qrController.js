@@ -1,11 +1,6 @@
 const User = require("../models/User");
 const generateQRCode = require("../utils/qrGenerator");
 
-/**
- * @desc Generate QR code for a user
- * @route GET /api/qr/generate
- * @access Private (Requires JWT Authentication)
- */
 exports.generateQR = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
@@ -13,20 +8,17 @@ exports.generateQR = async (req, res) => {
 
     const profileLink = `https://yourwebsite.com/profile/${user._id}`;
 
-    // Data to encode in QR Code
     const qrData = {
       id: user._id,
       name: user.name,
       bloodType: user.bloodType,
       medicalHistory: user.medicalHistory,
       emergencyContacts: user.emergencyContacts,
-      profileLink : profileLink
+      profileLink: profileLink
     };
 
-    // Generate QR Code
     const qrCodeURL = await generateQRCode(qrData);
 
-    // Save QR Code URL in the database
     user.qrCode = qrCodeURL;
     await user.save();
 
@@ -37,11 +29,6 @@ exports.generateQR = async (req, res) => {
   }
 };
 
-/**
- * @desc Retrieve user's QR code
- * @route GET /api/qr/get
- * @access Private (Requires JWT Authentication)
- */
 exports.getQR = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("qrCode");
