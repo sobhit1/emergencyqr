@@ -15,6 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/", (req, res) => {
+    res.send("API is running...");
+});
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/qr", require("./routes/qrRoutes"));
 app.use("/api/sos", require("./routes/sosRoutes"));
@@ -33,3 +36,8 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running at: http://localhost:${PORT}`);
 });
+
+module.exports = (req, res) => {
+    
+    return app(req, res);
+  };
