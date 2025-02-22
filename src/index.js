@@ -10,7 +10,10 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -22,6 +25,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/qr", require("./routes/qrRoutes"));
 app.use("/api/sos", require("./routes/sosRoutes"));
 app.use("/api/voice", require("./routes/voiceRoutes"));
+app.use("/api/chatbot", require("./routes/chatbotRoutes"));
 
 app.use((req, res, next) => {
     res.status(404).json({ message: "Route Not Found" });
@@ -38,6 +42,5 @@ app.listen(PORT, () => {
 });
 
 module.exports = (req, res) => {
-    
     return app(req, res);
-  };
+};

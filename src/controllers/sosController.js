@@ -3,34 +3,24 @@ const SOS = require("../models/SOS");
 const User = require("../models/User");
 const detectFakeReports = require("../utils/fraudDetection");
 
-// Twilio client setup
 const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
-/**
- * @desc Trigger an SOS alert and notify emergency contacts
- * @route POST /api/sos/trigger
- * @access Private (Requires JWT Authentication)
- */
 exports.triggerSOS = async (req, res) => {
   try {
     const { location } = req.body;
-    const user = await User.findById(req.user.id); // Ensure authMiddleware sets req.user.id
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Extract IP address
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     console.log("User IP:", ip);
 
-    // Check for fake reports based on IP
     const isFake = await detectFakeReports(ip);
 
-    // Create SOS record in the database
     const sosAlert = await SOS.create({
       IPAddress: ip,
       location,
     });
 
-    // Construct SOS alert message
     const message = `🚨 SOS Alert! ${user.name} needs help at ${location.lat}, ${location.long}. Blood Type: ${user.bloodType}. Medical History: ${user.medicalHistory}. ${isFake ? "(⚠️ BEWARE: THIS IP HAS BEEN FLAGGED FOR SUSPICIOUS ACTIVITY)" : ""}`;
 
     // Emergency contact list (Add actual contacts from user DB)
