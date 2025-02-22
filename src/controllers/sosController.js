@@ -23,12 +23,10 @@ exports.triggerSOS = async (req, res) => {
 
     const message = `🚨 SOS Alert! ${user.name} needs help at ${location.lat}, ${location.long}. Blood Type: ${user.bloodType}. Medical History: ${user.medicalHistory}. ${isFake ? "(⚠️ BEWARE: THIS IP HAS BEEN FLAGGED FOR SUSPICIOUS ACTIVITY)" : ""}`;
 
-    // Emergency contact list (Add actual contacts from user DB)
     const emergencyNumbers = user.emergencyContacts || [
-      { phone: "+919166062822" }, // Default emergency contact (for testing)
+      { phone: "+919166062822" }, 
     ];
 
-    // Send SMS alert to emergency contacts
     for (const contact of emergencyNumbers) {
       await client.messages.create({
         body: message,
@@ -44,11 +42,6 @@ exports.triggerSOS = async (req, res) => {
   }
 };
 
-/**
- * @desc Retrieve all SOS alerts for a user
- * @route GET /api/sos/history
- * @access Private (Requires JWT Authentication)
- */
 exports.getSOSHistory = async (req, res) => {
   try {
     const sosHistory = await SOS.find({ userId: req.user }).sort({ timestamp: -1 });
@@ -62,11 +55,6 @@ exports.getSOSHistory = async (req, res) => {
   }
 };
 
-/**
- * @desc Resolve an SOS alert (Admin or User)
- * @route PUT /api/sos/resolve/:id
- * @access Private (Requires JWT Authentication)
- */
 exports.resolveSOS = async (req, res) => {
   try {
     const sosAlert = await SOS.findById(req.params.id);
