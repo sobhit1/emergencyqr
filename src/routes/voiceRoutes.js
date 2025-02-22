@@ -1,20 +1,20 @@
 const express = require("express");
-const multer = require("multer");
-const { voiceSOS } = require("../controllers/voiceController");
-const authMiddleware = require("../middlewares/authMiddleware");
+const { triggerVoiceSOS } = require("../controllers/voiceSOSController");
 
 const router = express.Router();
 
-
-const storage = multer.memoryStorage(); // This doesn't try to write to disk
-const upload = multer({ 
-  storage: storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // Example: limit to 10MB
+/**
+ * @desc Start voice detection for SOS
+ * @route GET /api/voice-sos/start
+ */
+router.get("/start", (req, res) => {
+  try {
+    console.log("🎤 Starting Voice Activation for SOS...");
+    res.status(200).json({ message: "Voice SOS listening activated!" });
+  } catch (err) {
+    console.error("❌ Error starting voice activation:", err);
+    res.status(500).json({ message: "Failed to start voice SOS." });
   }
 });
-
-
-router.post("/sos", authMiddleware, upload.single("audio"), voiceSOS);
 
 module.exports = router;

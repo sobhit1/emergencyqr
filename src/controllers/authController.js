@@ -24,7 +24,8 @@ exports.register = async (req, res) => {
     res.setHeader('Authorization', `Bearer ${token}`);
     res.status(201).json({
       message: "User registered successfully",
-      user: { id: user._id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email },
+      token: token
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -55,7 +56,7 @@ exports.login = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select("-password");
+    const user = await User.findById(req.params.id).select("-password");
 
     if (!user) return res.status(404).json({ message: "User not found" });
 

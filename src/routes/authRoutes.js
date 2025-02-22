@@ -9,7 +9,7 @@ router.post("/register", register);
 
 router.post("/login", login);
 
-router.get("/me", authMiddleware, getProfile);
+router.get("/me/:id", getProfile);
 
 router.put("/update", authMiddleware, updateUserProfile);
 
