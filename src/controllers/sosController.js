@@ -7,8 +7,8 @@ const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN)
 
 exports.triggerSOS = async (req, res) => {
   try {
-    const { location } = req.body;
-    const user = await User.findById(req.user.id);
+    const { id, location } = req.body;
+    const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;

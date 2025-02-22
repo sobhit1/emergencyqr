@@ -4,10 +4,10 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.post("/trigger", authMiddleware, triggerSOS);
+router.post("/trigger", triggerSOS);
 
-router.get("/history", authMiddleware, getSOSHistory);
+router.get("/history", getSOSHistory);
 
-router.put("/resolve/:id", authMiddleware, resolveSOS);
+router.put("/resolve/:id", resolveSOS);
 
 module.exports = router;
