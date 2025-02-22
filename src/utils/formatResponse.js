@@ -1,15 +1,17 @@
 const formatResponse = (text) => {
     if (!text) return "";
 
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    let formattedText = text.replace(/\*/g, "");
 
-    formattedText = formattedText.replace(/\d+\.\s(.*?)(?=\n|$)/g, "<li>$1</li>");
+    formattedText = formattedText.replace(/\b([A-Z\s]{4,})\b/g, (match) => match.charAt(0) + match.slice(1).toLowerCase());
 
-    formattedText = `<ul>${formattedText}</ul>`;
+    formattedText = formattedText.replace(/\d+\.\s(.*?)(?=\n|$)/g, "- $1");
 
-    formattedText = formattedText.replace(/\n/g, "<br>");
+    formattedText = formattedText.replace(/\n{2,}/g, "\n\n");
 
-    return formattedText;
+    formattedText = formattedText.replace(/\n/g, " ");
+
+    return formattedText.trim();
 };
 
 module.exports = formatResponse;
